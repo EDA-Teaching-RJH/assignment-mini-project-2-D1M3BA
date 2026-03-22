@@ -1,7 +1,7 @@
 import sys
 import csv
 import re
-
+from classes import Transaction, Expense, Income
 
 def main():
     if len(sys.argv)  != 3:
@@ -22,12 +22,38 @@ def main():
 
     elif mode.lower() == "open":
 
-        validate_file(filename)
+        if not validate_file(filename):
+            print("Error: Invalid file")
+            sys.exit
+        else:
+            print(f"Sucessfully opened {filename} ")
     
     else: 
         
         print("Usage: personalExpenseTracker.py  <create|open> <filename>")
         sys.exit()
+
+    while True:
+        print_menu()
+        while True:
+            opt = get_opt()
+            if opt in ["0"]:
+                break
+            else:
+                print("Invalid option, please try again!")
+            
+        if opt == "0" :
+            print(f"See you next time")
+            sys.exit()
+def get_opt():
+    return input("Enter your option: ")
+    
+    
+def print_menu():
+
+    print("0. Exit the program")
+
+
 
         
 
@@ -79,3 +105,6 @@ def create_file(filename):
 if __name__ == "__main__":
 
     main()
+
+
+
