@@ -5,11 +5,11 @@ import re
 
 def main():
     if len(sys.argv)  != 3:
-        print("Usage: python main.py <filename> <create|open>")
+        print("Usage: personalExpenseTracker.py <create|open> <filename> ")
         sys.exit()
 
-    filename = sys.argv[1]
-    mode = sys.argv[2]
+    filename = sys.argv[2]
+    mode = sys.argv[1]
 
     if not validate_file_type(filename):
             print("Error: file must be a .csv")
@@ -26,7 +26,7 @@ def main():
     
     else: 
         
-        print("Usage: python main.py <filename> <create|find>")
+        print("Usage: personalExpenseTracker.py  <create|open> <filename>")
         sys.exit()
 
         
@@ -42,8 +42,8 @@ def validate_file(filename):
     try:
         with open(filename, "r") as file:
             reader = csv.reader(file)
-            headers = next(reader)
-            if headers != HEADERS:
+            headers = next(reader, None)
+            if headers is None or headers != HEADERS:
                 print("Invalid file")
                 return False
             return True
