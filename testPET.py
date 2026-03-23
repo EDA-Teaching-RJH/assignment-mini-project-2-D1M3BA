@@ -1,5 +1,6 @@
 import unittest
 import csv
+import os
 from personalExpenseTracker import validate_file_type, validate_file
 
 class TestValidateFileType(unittest.TestCase):
@@ -45,7 +46,7 @@ class TestValidateFile(unittest.TestCase):
     def setUp(self):
         with open("test_valid.csv", "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["amount", "description", "category", "date"])
+            writer.writerow(["amount", "description", "category", "date", "type"])
     
         with open("incorrect_headers.csv", "w", newline="") as f:
             writer = csv.writer(f)
@@ -53,11 +54,11 @@ class TestValidateFile(unittest.TestCase):
     
         with open("too_many_headers.csv", "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["amount", "description", "category", "date", "hi"])
+            writer.writerow(["amount", "description", "category", "date", "hi", "bye"])
     
         with open("headers_wrong_order.csv", "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["amount", "date", "category", "description"])
+            writer.writerow(["amount", "date", "category", "description", "type"])
 
    
         with open("emptyfile.csv", "w") as f:
@@ -84,8 +85,19 @@ class TestValidateFile(unittest.TestCase):
     def test_file_not_found(self):
         self.assertFalse(validate_file("doesnotexist.csv"))
     
+    def tearDown(self):
+        for file in ["test_valid.csv", "incorrect_headers.csv", "too_many_headers.csv", "headers_wrong_order.csv", "emptyfile.csv"]:
+            if os.path.exists(file):
+                os.remove(file)
+
+   
+    
+
+
+
 
 
 
 if __name__ == "__main__":
     unittest.main()
+
