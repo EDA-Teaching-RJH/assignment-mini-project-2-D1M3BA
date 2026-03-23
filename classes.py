@@ -10,10 +10,12 @@ class Transaction:
         return f"{self.date} | {self.description} | {self.category} | £{self.amount}"
     
 class Expense(Transaction):
+    type = "expense"
     def __init__(self, amount, description, category, date):
         super().__init__(amount, description, category, date)
 
 
 class Income(Transaction):
+    type = "income"
     def __init__(self, amount, description, category, date):
         super().__init__(amount, description, category, date)
