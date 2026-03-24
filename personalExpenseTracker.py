@@ -2,7 +2,7 @@ import sys
 import csv
 import re
 from classes import Transaction, Expense, Income
-from utils import get_amount, get_date, get_description
+from utils import get_amount, get_date, get_description, sort_by_category, sort_by_date, sort_by_price, print_transactions
 
 def main():
     if len(sys.argv)  != 3:
@@ -20,7 +20,7 @@ def main():
         print_menu()
         while True:
             opt = get_opt()
-            if opt in ["0", "1"]:
+            if opt in ["0", "1", "2", "3"]:
                 break
             else:
                 print("Invalid option, please try again!")
@@ -28,8 +28,59 @@ def main():
         if opt == "0" :
             print(f"See you next time")
             sys.exit()
-        elif  opt =="1":
+        elif opt =="1":
+            view_transactions(transactions)
+        elif  opt =="2":
             categories, transactions = get_transaction(filename, categories, transactions)
+        elif opt == "3":
+            categories, transcations = edit_transaction(filename, categories, transactions)
+
+
+def view_transactions(transactions):
+    print ("How would you like to view the transactions")
+    print ("1. As they are now")
+    print ("2. Sorted by date")
+    print ("3. Sorted by price")
+    print ("4. Sorted by Category")
+    print ("5. Exit to menu")
+    while True:
+            opt = get_opt()
+            if opt in ["1", "2", "3", "4", "5"]:
+                break
+            else:
+                print("Invalid option, please try again!")
+    if opt == "5":
+        return
+    elif opt == "1":
+        print_transactions(transactions)
+    elif opt == "2":
+        print_transactions(sort_by_date(transactions))
+    elif opt == "3":
+        print_transactions(sort_by_price(transactions))
+    elif opt == "4":
+        print_transactions(sort_by_category(transactions))
+    
+
+    
+
+def edit_transaction(filename, categories, transactions):
+    while True:
+        print("Would you like to?")
+        print ("1. Edit a transaction")
+        print ("2. Remove a transaction")
+        print ("3. Cancel edit")
+        while True:
+            opt = get_opt()
+            if opt in ["1", "2", "3"]:
+                break
+            else:
+                print("Invalid option, please try again!")
+        if opt == 3:
+            return categories, transactions
+        
+        
+
+
 
 def load_transactions(filename):
     transactions = []
@@ -147,9 +198,11 @@ def get_opt():
     
     
 def print_menu():
-
-    print("1. Add a Transaction")
+    print("1. View transactions")
+    print("2. Add a Transaction")
+    print("3. Edit Transactions")
     print("0. Exit the program")
+    
 
 
 
