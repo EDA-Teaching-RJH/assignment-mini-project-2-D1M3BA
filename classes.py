@@ -19,3 +19,6 @@ class Income(Transaction):
     type = "income"
     def __init__(self, amount, description, category, date):
         super().__init__(amount, description, category, date)
+
+
+
