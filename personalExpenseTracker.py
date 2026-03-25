@@ -20,7 +20,7 @@ def main():
         print_menu()
         while True:
             opt = get_opt()
-            if opt in ["0", "1", "2", "3"]:
+            if opt in ["0", "1", "2", "3", "4"]:
                 break
             else:
                 print("Invalid option, please try again!")
@@ -35,11 +35,77 @@ def main():
         elif opt == "3":
             categories, transactions = alter_transaction(filename, categories, transactions)
         elif opt == "4":
-            categories = categories_menu(categories)
+            categories, transaction = categories_menu(filename,categories, transactions)
 
-def categories_menu(categories):
+def categories_menu(filename, categories, transactions):
     print("1. Add a category")
     print("2. Change a category ")
+    print("3. View categories")
+    while True:
+        opt = get_opt()
+        if opt in ["1", "2", "3"]:
+            break
+        else:
+            print("Invalid input, please try again")
+    if opt == "1":
+      categories =  add_category(categories)
+    elif opt == "3":
+        view_category(categories)
+    else:
+       categories, transactions = edit_category(filename, categories, transactions)
+    
+    return categories, transactions
+
+
+def view_category(categories):
+    for i in range(len(categories)):
+        print(f"{i+1}. {categories[i]}")
+
+
+def edit_category(filename, categories, transactions):
+    view_category(categories)
+    
+    while True:
+        try:
+            idx = int(input("Select category to edit: ")) - 1
+            if 0 <= idx < len(categories):
+                break
+            print("Invalid number")
+        except ValueError:
+            print("Enter a number")
+
+    old_category = categories[idx]
+    
+    print(f"Editing: {old_category}")
+    print("1. Change to existing category")
+    print("2. Create new category")
+    
+    while True:
+        opt = get_opt()
+        if opt in ["1", "2"]:
+            break
+        print("Invalid option")
+
+    if opt == "1":
+        new_category = get_category(categories)[0]
+    elif opt == "2":
+        new_category = input("Enter new category name: ")
+        categories.append(new_category)
+
+    for i in range(len(transactions)):
+        if transactions[i].category == old_category:
+            transactions[i].category = new_category
+    
+    categories.remove(old_category)
+    save_transactions(filename, transactions)
+    return categories, transactions
+
+def add_category(categories):
+    new_category = input("Enter new category name: ")
+    if new_category not in categories:
+        categories.append(new_category)
+    return categories
+
 
 def view_transactions(transactions):
     print ("How would you like to view the transactions")

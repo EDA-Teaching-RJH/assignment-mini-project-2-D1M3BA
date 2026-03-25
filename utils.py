@@ -56,7 +56,7 @@ def print_transactions(transactions):
     print(f"{'#':<5} {'Date':<12} {'Description':<20} {'Category':<15} {'Amount':>10} {'Type':<20}")
     print("-" * 70)
     n = 1
-    for t in transactions:
+    for t in transactions:4
         if len(t.description) > 20:
             description = t.description[:17] + "..." 
         else:

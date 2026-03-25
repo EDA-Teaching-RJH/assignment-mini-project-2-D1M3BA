@@ -1,7 +1,7 @@
 import unittest
 import csv
 import os
-from personalExpenseTracker import validate_file_type, validate_file,save_transaction, load_transactions
+from personalExpenseTracker import validate_file_type, validate_file, append_transaction, load_transactions
 from utils import validate_description, validate_amount, validate_date
 from classes import Transaction, Income, Expense
 
@@ -141,7 +141,7 @@ class TestSaveTransaction(unittest.TestCase):
 
     def test_saves_expense(self):
         t = Expense(50.00, "Tesco", "food", "01/01/2000")
-        save_transaction("test_save.csv", t)
+        append_transaction("test_save.csv", t)
         
         with open("test_save.csv", "r") as f:
             reader = csv.reader(f)
@@ -156,7 +156,7 @@ class TestSaveTransaction(unittest.TestCase):
 
     def test_saves_income(self):
         t = Income(1000.00, "Salary", "work", "01/01/2000")
-        save_transaction("test_save.csv", t)
+        append_transaction("test_save.csv", t)
         
         with open("test_save.csv", "r") as f:
             reader = csv.reader(f)
