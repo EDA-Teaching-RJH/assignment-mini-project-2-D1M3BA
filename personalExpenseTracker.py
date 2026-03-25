@@ -20,7 +20,7 @@ def main():
         print_menu()
         while True:
             opt = get_opt()
-            if opt in ["0", "1", "2", "3", "4"]:
+            if opt in ["0", "1", "2", "3", "4", "5"]:
                 break
             else:
                 print("Invalid option, please try again!")
@@ -36,6 +36,24 @@ def main():
             categories, transactions = alter_transaction(filename, categories, transactions)
         elif opt == "4":
             categories, transaction = categories_menu(filename,categories, transactions)
+        elif opt == "5":
+            print(f"Your balance is {get_balance(transactions)}")
+
+
+def get_balance(transacitons):
+    expense = 0
+    income= 0 
+    for i in range(len(transacitons)):
+        if transacitons[i].type  == "expense":
+            expense += transacitons[i].amount
+        elif transacitons[i].type == "income":
+            income +=  transacitons[i].amount 
+
+    return income - expense
+
+
+
+
 
 def categories_menu(filename, categories, transactions):
     print("1. Add a category")
@@ -320,6 +338,7 @@ def print_menu():
     print("2. Add a Transaction")
     print("3. Edit Transactions")
     print("4. Categories")
+    print("5. View balance")
     print("0. Exit the program")
     
     
