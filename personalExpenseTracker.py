@@ -2,7 +2,7 @@ import sys
 import csv
 import re
 from classes import Transaction, Expense, Income
-from utils import get_amount, get_date, get_description, sort_by_category, sort_by_date, sort_by_price, print_transactions
+from utils import get_amount, get_date, get_description, sort_by_category, sort_by_date, sort_by_price, print_transactions, select_transaction
 
 def main():
     if len(sys.argv)  != 3:
@@ -33,8 +33,13 @@ def main():
         elif  opt =="2":
             categories, transactions = get_transaction(filename, categories, transactions)
         elif opt == "3":
-            categories, transcations = edit_transaction(filename, categories, transactions)
+            categories, transactions = alter_transaction(filename, categories, transactions)
+        elif opt == "4":
+            categories = categories_menu(categories)
 
+def categories_menu(categories):
+    print("1. Add a category")
+    print("2. Change a category ")
 
 def view_transactions(transactions):
     print ("How would you like to view the transactions")
@@ -63,7 +68,7 @@ def view_transactions(transactions):
 
     
 
-def edit_transaction(filename, categories, transactions):
+def alter_transaction(filename, categories, transactions):
     while True:
         print("Would you like to?")
         print ("1. Edit a transaction")
@@ -75,11 +80,58 @@ def edit_transaction(filename, categories, transactions):
                 break
             else:
                 print("Invalid option, please try again!")
-        if opt == 3:
+        if opt == "3":
             return categories, transactions
-        
-        
+        elif opt == "1":
+            idx  =  select_transaction(transactions, "edit")
+            edit_transaction(transactions, idx, filename, categories)
+        elif opt == "2":
+            idx = select_transaction(transactions, "delete" )
+            delete_transactions(filename, transactions,idx)
+            
 
+def edit_transaction(transactions, idx, filename, categories):
+    print(f"Editing: {transactions[idx]} | {transactions[idx].type}")
+    
+    while True:
+        print("1. Date")
+        print("2. Description")
+        print("3. Category")
+        print("4. Amount")
+        print("5. Done editing")
+
+        while True:
+            opt = get_opt()
+            if opt in ["1", "2", "3", "4", "5"]:
+                break
+            print("Invalid option")
+
+        if opt == "1":
+            transactions[idx].date = get_date()
+        elif opt == "2":
+            transactions[idx].description = get_description()
+        elif opt == "3":
+            transactions[idx].category = get_category(categories)[0]
+        elif opt == "4":
+            transactions[idx].amount = float(get_amount())
+        elif opt == "5":
+            break
+
+    save_transactions(filename, transactions)
+    return transactions
+
+def delete_transactions(filename, transactions, idx):
+    transactions.pop(idx)
+    save_transactions(filename, transactions)
+    return transactions   
+
+            
+def save_transactions(filename, transactions):      
+    with open(filename, "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(["amount", "description", "category", "date", "type"])
+            for t in transactions:
+                writer.writerow([t.amount, t.description, t.category, t.date, t.type])
 
 
 def load_transactions(filename):
@@ -158,11 +210,11 @@ def get_transaction(filename, categories, transactions):
     elif opt ==  "2":
          t = Income(float(amount), description, category, date)
     transactions.append(t)
-    save_transaction(filename , t)
+    append_transaction(filename , t)
 
     return categories, transactions   
 
-def save_transaction(filename, t):
+def append_transaction(filename, t):
     with open(filename, "a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([t.amount, t.description, t.category, t.date, t.type])
@@ -201,7 +253,9 @@ def print_menu():
     print("1. View transactions")
     print("2. Add a Transaction")
     print("3. Edit Transactions")
+    print("4. Categories")
     print("0. Exit the program")
+    
     
 
 

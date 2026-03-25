@@ -53,12 +53,31 @@ def print_transactions(transactions):
         print("Nothing to display")
         return
     
-    print(f"{'Date':<12} {'Description':<20} {'Category':<15} {'Amount':>10} {'Type':<20}")
+    print(f"{'#':<5} {'Date':<12} {'Description':<20} {'Category':<15} {'Amount':>10} {'Type':<20}")
     print("-" * 70)
+    n = 1
     for t in transactions:
         if len(t.description) > 20:
             description = t.description[:17] + "..." 
         else:
             description = t.description
 
-        print(f"{t.date:<12} {description:<20} {t.category:<15} {t.amount:>10.2f} {t.type:<20}")
+        print(f"{n:<5} {t.date:<12} {description:<20} {t.category:<15} {t.amount:>10.2f} {t.type:<20}")
+        n += 1
+
+
+def select_transaction(transactions, mode):
+    print(f"Which transaction would you like to {mode}, select one from below")
+    print_transactions(transactions)
+    while True:
+        try:
+            index = int(input("Select transaction number: "))
+            if 1 <= index <= len(transactions):
+                return (index - 1)
+            print("Invalid number, try again")
+        except ValueError:
+            print("Enter a number")
+
+
+
+    
