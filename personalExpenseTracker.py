@@ -400,7 +400,7 @@ def get_category(categories):
             if category in categories:
                 return category, categories
             else:
-                print(f"The category: {category} does not exists would you like to add it y/n")
+                print(f"The category {category} does not exists would you like to add it y/n")
                 while True:
                     opt = get_opt()
                     if opt in ["y", "n"]:
